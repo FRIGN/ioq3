@@ -292,7 +292,7 @@ TOMSFASTMATHSRCDIR=$(AUTOUPDATERSRCDIR)/rsa_tools/tomsfastmath-0.13.1
 LOKISETUPDIR=misc/setup
 NSISDIR=misc/nsis
 WEBDIR=$(MOUNT_DIR)/web
-SDLHDIR=$(MOUNT_DIR)/SDL2
+SDLHDIR=$(MOUNT_DIR)/SDL3
 LIBSDIR=$(MOUNT_DIR)/libs
 
 bin_path=$(shell which $(1) 2> /dev/null)
@@ -320,20 +320,12 @@ ifneq ($(call bin_path, $(PKG_CONFIG)),)
   CURL_LIBS ?= $(shell $(PKG_CONFIG) --silence-errors --libs libcurl)
   OPENAL_CFLAGS ?= $(shell $(PKG_CONFIG) --silence-errors --cflags openal)
   OPENAL_LIBS ?= $(shell $(PKG_CONFIG) --silence-errors --libs openal)
-  SDL_CFLAGS ?= $(shell $(PKG_CONFIG) --silence-errors --cflags sdl2|sed 's/-Dmain=SDL_main//')
-  SDL_LIBS ?= $(shell $(PKG_CONFIG) --silence-errors --libs sdl2)
+  SDL_CFLAGS ?= $(shell $(PKG_CONFIG) --silence-errors --cflags sdl3)
+  SDL_LIBS ?= $(shell $(PKG_CONFIG) --silence-errors --libs sdl3)
 else
   # assume they're in the system default paths (no -I or -L needed)
   CURL_LIBS ?= -lcurl
   OPENAL_LIBS ?= -lopenal
-endif
-
-# Use sdl2-config if all else fails
-ifeq ($(SDL_CFLAGS),)
-  ifneq ($(call bin_path, sdl2-config),)
-    SDL_CFLAGS = $(shell sdl2-config --cflags)
-    SDL_LIBS = $(shell sdl2-config --libs)
-  endif
 endif
 
 # Add git version info
